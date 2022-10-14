@@ -3,13 +3,27 @@
 @tailwind utilities;
 
 .input input {
-    width: 100%;
-    border: 2px solid black;
+    width: 350px;
+    height: 500px;
+    border: 1px solid rgb(146, 146, 146);
     border-radius: 4px;
     margin-top: 20px;
     margin-bottom: 20px;
     text-indent: 10px;
     font-size: 20px;
+    background: transparent;
+    color: #fff;
+
+}
+
+.input input:focus {
+    outline: none;
+}
+
+.input input:hover {
+    /* background: #806ED3; */
+    border: 2px solid #806ED3;
+    background: transparent;
 }
 
 .input>div {
@@ -19,8 +33,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 2px solid black;
+    border: 1px solid rgb(146, 146, 146);
     /* margin: 10px; */
     padding: 10px;
     border-radius: 4px;
+    background: transparent;
+
+}
+
+.input>div:focus {
+    outline: none;
+}
+
+.input>div:hover {
+    border: 2px solid #806ED3;
+    background: transparent;
 }
