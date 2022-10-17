@@ -28,7 +28,7 @@ const Sidebar = () => {
                 </div>
 
                 <div className={style.ul}>
-                    <li><a className={style.ul_a} href="#">All</a></li>
+                    <li><a className={style.ul_a} href="#">Bce</a></li>
                     <li><a className={style.ul_a} href="#">Private</a></li>
                     <li><a className={style.ul_a} href="#">Groups</a></li>
                     <li><a className={style.ul_a} href="#">Channels</a></li>
