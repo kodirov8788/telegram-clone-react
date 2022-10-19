@@ -1,5 +1,6 @@
+import { async } from "@firebase/util";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore"
+import { collection, onSnapshot } from "firebase/firestore"
 import { createContext, useState, useEffect } from "react"
 import { auth, db } from "../firebase/firebaseConfig";
 
@@ -20,15 +21,19 @@ export const UserContextProvider = ({ children }) => {
             setCurrentUser(user)
         });
 
-        const getData = async () => {
-            const box = []
-            const querySnapshot = await getDocs(collection(db, "users"));
-            querySnapshot.forEach((doc) => box.push({ id: doc.id, data: doc.data() }));
-            setUserData(box)
-        }
+        const unsubscribe = onSnapshot(
+            collection(db, "users"),
+            async (snapshot) => {
+                const data = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }))
+                return setUserData(data)
+            },
+            (error) => {
+                console.log(error)
+            });
+
         return () => {
             unsub()
-            getData()
+            unsubscribe();
         }
     }, []);
 

@@ -1,18 +1,17 @@
-import React from 'react'
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
-import "react-phone-number-input/style.css"
-import { useState } from "react";
-import { auth } from "../firebase/firebaseConfig"
-import PhoneInput from 'react-phone-number-input'
-import TelegramImg from "../images/telegram.svg"
-import { useNavigate } from "react-router-dom"
-import { async } from '@firebase/util';
-function Register() {
-    const [userdata, setUserdata] = useState({
-        username: "",
-        image: "",
+import React, { useContext, useEffect, useState } from 'react'
+import { UserContextApi } from '../context/UserContext'
+import { auth, db } from "../firebase/firebaseConfig"
+import { doc, updateDoc } from "firebase/firestore";
 
-    })
+
+function Register() {
+    const { userData, currentUser } = useContext(UserContextApi)
+    const [selectedData, setSelectedData] = useState()
+    console.log(userData)
+    console.log(currentUser)
+    console.log(selectedData)
+
+
     const stl = {
         form: "w-full h-[100vh] flex flex-col justify-center items-center bg-[#000] relative",
         register: "flex flex-col items-center w-full h-[100vh] bg-[#212121] ",
@@ -24,20 +23,32 @@ function Register() {
         btn: "text-[20px] text-[#FFFFFF] mt-[30px] font-sans w-[350px] h-[55px] border-none p-2 bg-[#8774E1] rounded hover:bg-[#6A52DA] duration-300"
     }
 
-    const hundleRegister = (e) => {
+    const hundleRegister = async (e) => {
         e.preventDefault()
         const username = e.target[0].value
         const files = e.target[1].value
         console.log(username)
-        console.log(files)
+        console.log(selectedData.id)
+        const registerUpdate = doc(db, "users", selectedData[0].id);
+
+        await updateDoc(registerUpdate, {
+            username: username,
+            uuid: selectedData[0].id,
+        });
+
     }
+
+    useEffect(() => {
+
+        const isUser = userData.filter(item => item.data.number === currentUser.phoneNumber)
+        setSelectedData(isUser)
+    }, [userData])
 
 
     return (
         <form className={stl.form} onSubmit={hundleRegister}>
             <h1 className={stl.h1}>Login</h1>
-            <input className={stl.input} type="text" placeholder="Username" onChange={(e) => setUserdata({ ...userdata, username: e.target.value })} />
-            <input className={stl.input} type="password" placeholder="Password" onChange={(e) => setUserdata({ ...userdata, username: e.target.value })} />
+            <input className={stl.input} type="text" placeholder="Username" />
             <div className="">
                 <input className="mt-[30px]" type="file" />
             </div>

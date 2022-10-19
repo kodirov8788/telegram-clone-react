@@ -2,15 +2,17 @@ import React from 'react'
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
 import "react-phone-number-input/style.css"
 import { useState, useContext } from "react";
-import { auth } from "../firebase/firebaseConfig"
+import { auth, db } from "../firebase/firebaseConfig"
 import PhoneInput from 'react-phone-number-input'
 import TelegramImg from "../images/telegram.svg"
 import { useNavigate } from "react-router-dom"
 import { UserContextApi } from "../context/UserContext"
+import { collection, addDoc } from "firebase/firestore";
 
 function NumberRegister() {
-    const { user } = useContext(UserContextApi)
-    console.log(user)
+    const { userData, currentUser } = useContext(UserContextApi)
+    // console.log(userData)
+    // console.log(currentUser)
     const navigate = useNavigate()
     const [config, setConfig] = useState({
         number: "+998",
@@ -48,7 +50,6 @@ function NumberRegister() {
 
         } else {
             try {
-                console.log("sdadas")
                 const response = await setRecaptcha(config.number)
                 console.log(response)
                 setConfig({ ...config, flag: true, confirmObj: response })
@@ -63,6 +64,7 @@ function NumberRegister() {
 
     const hundleVarified = async (e) => {
         e.preventDefault()
+        const isUser = userData.some(item => config.number.includes(item.data.number))
 
         if (config.varifyCode === "" || config.varifyCode === undefined) {
             setConfig({ ...config, error: "Varified Nimadir xato" })
@@ -70,17 +72,26 @@ function NumberRegister() {
         }
         else {
             try {
+                if (isUser) {
+                    navigate("/")
+                } else {
+                    config.confirmObj.confirm(config.varifyCode)
+                        .then(async () => {
+                            await addDoc(collection(db, "users"), {
+                                username: "",
+                                number: config.number,
+                                imgLink: "",
+                                uuid: ""
+                            });
 
-                config.confirmObj.confirm(config.varifyCode)
-                    .then(res => {
+                            setConfig({ ...config, flag: false })
+                            navigate("/register")
+                        })
+                        .catch(() => {
+                            alert("code hato, qayta urunib koring!")
+                        })
+                }
 
-
-                        setConfig({ ...config, flag: false })
-                        navigate("/")
-                    })
-                    .catch(err => {
-                        alert("code hato, qayta urunib koring!")
-                    })
 
 
             } catch (error) {
