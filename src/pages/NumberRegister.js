@@ -1,13 +1,16 @@
 import React from 'react'
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
 import "react-phone-number-input/style.css"
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { auth } from "../firebase/firebaseConfig"
 import PhoneInput from 'react-phone-number-input'
 import TelegramImg from "../images/telegram.svg"
 import { useNavigate } from "react-router-dom"
-import { async } from '@firebase/util';
+import { UserContextApi } from "../context/UserContext"
+
 function NumberRegister() {
+    const { user } = useContext(UserContextApi)
+    console.log(user)
     const navigate = useNavigate()
     const [config, setConfig] = useState({
         number: "+998",
@@ -69,11 +72,17 @@ function NumberRegister() {
             try {
 
                 config.confirmObj.confirm(config.varifyCode)
-                    .then(res => console.log("res >>", res))
-                    .catch(err => console.log("error >>", err.message))
+                    .then(res => {
 
-                // setConfig({ ...config, flag: false })
-                // navigate("/")
+
+                        setConfig({ ...config, flag: false })
+                        navigate("/")
+                    })
+                    .catch(err => {
+                        alert("code hato, qayta urunib koring!")
+                    })
+
+
             } catch (error) {
                 setConfig({ ...config, error: "Varified catch Nimadir xato" })
             }
