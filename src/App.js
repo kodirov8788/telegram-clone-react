@@ -1,15 +1,20 @@
-import Sidebar from "./pages/Sidebar";
-import { useContext } from "react"
+import Sidebar from "./components/Sidebar";
+import { useContext, useEffect } from "react"
 import { ChatContextApi } from "./context/ChatContext";
+import Main from "./components/Main";
 
 function App() {
   const { chatData } = useContext(ChatContextApi)
-  console.log("chat data:", chatData)
+
+
 
   return (
-    <div className="App">
+    <div className="flex">
       <Sidebar />
-    </div>
+      <Main />
+
+
+    </div >
   );
 }
 

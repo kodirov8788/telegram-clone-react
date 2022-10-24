@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GoThreeBars } from "react-icons/go"
 import { BsSearch } from "react-icons/bs"
+import { sidebar_data } from '../static_data'
+import SidebarTools from './SidebarTools'
 const Sidebar = () => {
+
     const style = {
         sidebar: "w-[400px] h-[100vh] bg-[#212121] relative z-10",
-        sidebar_nav: "w-[400px] h-[140px] border-b-[2px] flex flex-col justify-center border-[#131313]  ",
+        sidebar_nav: "w-[400px] h-[140px] border-b-[2px] flex flex-col justify-center border-[#131313]  relative ",
         nav: "w-[400px] h-[80px] flex items-center border-[#fff] border-[px]",
         nav_fabars_right: "ml-[10px] w-[45px]  h-[45px] rounded-full flex justify-center items-center text-[#AAAAAA] text-[25px] hover:bg-[#2B2B2B] ",
         nav_left: "w-[310px] ml-[10px] h-[45px] bg-[#181818] hover:border-[gray] hover:border-[1px] rounded-[30px] flex items-center",
@@ -16,7 +19,9 @@ const Sidebar = () => {
     }
     return (
         <div className={style.sidebar}>
+            <SidebarTools />
             <div className={style.sidebar_nav}>
+
                 <div className={style.nav}>
                     <div className={style.nav_fabars_right}>
                         <GoThreeBars />
@@ -34,18 +39,19 @@ const Sidebar = () => {
                     <li><a className={style.ul_a} href="#">Channels</a></li>
 
                 </div>
-
-
             </div>
-            <div className="w-full ">
-                <li className="flex bg-white px-3 py-2 cursor-pointer hover:bg-blue-100 duration-300">
-                    <img className='w-[50px] rounded-full mr-3' src="https://images.pexels.com/photos/4355346/pexels-photo-4355346.jpeg?cs=srgb&dl=pexels-murat-esibatir-4355346.jpg&fm=jpg" alt="" />
-                    <div className="w-full">
-                        <h2 className='text-[20px] font-bold'>Name</h2>
-                        <p>Last message</p>
-                    </div>
-                </li>
-            </div>
+            {sidebar_data.map(item => {
+                return <div className="w-full" key={item.id}>
+
+                    <li className="flex bg-white px-3 py-2 cursor-pointer hover:bg-blue-100 duration-300">
+                        <img className='w-[50px] rounded-full mr-3 object-cover' src={item.userImg} alt="" />
+                        <div className="w-full">
+                            <h2 className='text-[20px] font-bold'>{item.userName}</h2>
+                            <p>{item.lastMessage}</p>
+                        </div>
+                    </li>
+                </div>
+            })}
 
         </div>
     )
