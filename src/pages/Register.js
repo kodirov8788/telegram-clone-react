@@ -1,16 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContextApi } from '../context/UserContext'
-import { auth, db } from "../firebase/firebaseConfig"
-import { doc, updateDoc } from "firebase/firestore";
+import { auth, db, storage } from "../firebase/firebaseConfig"
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useNavigate } from "react-router-dom"
+
 
 
 function Register() {
+    const navigate = useNavigate()
     const { userData, currentUser } = useContext(UserContextApi)
     const [selectedData, setSelectedData] = useState()
     console.log(userData)
     console.log(currentUser)
     console.log(selectedData)
-
 
     const stl = {
         form: "w-full h-[100vh] flex flex-col justify-center items-center bg-[#000] relative",
@@ -26,16 +30,47 @@ function Register() {
     const hundleRegister = async (e) => {
         e.preventDefault()
         const username = e.target[0].value
-        const files = e.target[1].value
+        const file = e.target[1].value
+        console.log(file)
+        if (username === "") {
+            alert("usernameni kiriting!")
+        } else if (file === null || file === "") {
+            alert("rasm tanglang!")
+        } else {
+            const registerUpdate = doc(db, "users", selectedData[0].id);
+            try {
+                const storageRef = ref(storage, `images/${username}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                    },
+                    (error) => {
+                        console.log(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                            await updateProfile(auth.currentUser, {
+                                displayName: username,
+                                photoURL: downloadURL
+                            })
+                            await updateDoc(registerUpdate, {
+                                username: username,
+                                uuid: selectedData[0].id,
+                                imgLink: downloadURL
+                            });
+                            await setDoc(doc(db, "userChats", selectedData[0].id), {});
+                            navigate('/')
+                        });
+                    }
+                );
+            } catch (error) {
+                console.log(error)
+            }
+        }
         console.log(username)
         console.log(selectedData.id)
-        const registerUpdate = doc(db, "users", selectedData[0].id);
-
-        await updateDoc(registerUpdate, {
-            username: username,
-            uuid: selectedData[0].id,
-        });
-
     }
 
     useEffect(() => {

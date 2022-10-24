@@ -34,6 +34,17 @@ const Sidebar = () => {
                     <li><a className={style.ul_a} href="#">Channels</a></li>
 
                 </div>
+
+
+            </div>
+            <div className="w-full ">
+                <li className="flex bg-white px-3 py-2 cursor-pointer hover:bg-blue-100 duration-300">
+                    <img className='w-[50px] rounded-full mr-3' src="https://images.pexels.com/photos/4355346/pexels-photo-4355346.jpeg?cs=srgb&dl=pexels-murat-esibatir-4355346.jpg&fm=jpg" alt="" />
+                    <div className="w-full">
+                        <h2 className='text-[20px] font-bold'>Name</h2>
+                        <p>Last message</p>
+                    </div>
+                </li>
             </div>
 
         </div>
