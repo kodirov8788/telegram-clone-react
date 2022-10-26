@@ -30,7 +30,7 @@ function Register() {
     const hundleRegister = async (e) => {
         e.preventDefault()
         const username = e.target[0].value
-        const file = e.target[1].value
+        const file = e.target[1].files[0]
         console.log(file)
         if (username === "") {
             alert("usernameni kiriting!")

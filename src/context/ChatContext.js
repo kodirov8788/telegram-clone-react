@@ -11,9 +11,7 @@ export const ChatContextProvider = ({ children }) => {
         user: {},
     }
 
-    useEffect(() => {
-        console.log(INITIAL_STATE)
-    }, [INITIAL_STATE])
+
 
     const ChatReducer = (state, action) => {
         console.log(action)
@@ -23,7 +21,6 @@ export const ChatContextProvider = ({ children }) => {
                     user: action.payload,
                     chatId: currentUser.uid > action.payload.uid ? currentUser.uid + action.payload.uid : action.payload.uid + currentUser.uid
                 }
-
             default:
                 return state
         }

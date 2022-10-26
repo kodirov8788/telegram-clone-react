@@ -3,7 +3,7 @@ import { ChatContextApi } from '../context/ChatContext'
 
 function SidebarTools() {
     const { effect } = useContext(ChatContextApi)
-    console.log(effect)
+    // console.log(effect)
 
     return (<>
         <div className={`w-full h-full bg-blue-300 absolute top-0 z-10 flex ${effect ? "translate-x-[-1000px]" : "translate-x-[0]"} duration-1000`}>

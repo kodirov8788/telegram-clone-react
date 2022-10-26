@@ -29,4 +29,17 @@ export const sidebar_data = [
         userName: "Julia",
         lastMessage: "Take care"
     },
+    {
+        id: 6,
+        userImg: "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg",
+        userName: "Smith",
+        lastMessage: "Thanks"
+    },
+    {
+        id: 7,
+        userImg: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8ZmFjZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+        userName: "Doe",
+        lastMessage: "hi"
+    },
+
 ]
